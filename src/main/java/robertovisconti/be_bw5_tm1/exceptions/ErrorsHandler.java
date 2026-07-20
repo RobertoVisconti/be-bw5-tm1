@@ -46,7 +46,7 @@ public class ErrorsHandler {
         return new ErrorsDTO(ex.getMessage(), LocalDateTime.now());
     }
 
-    // 5. GESTIONE ACCESSO NEGATO
+    // 5. GESTIONE ACCESSO NEGATO (403 Acced Denied )
     @ExceptionHandler(AccessDeniedException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorsDTO handleAccessDenied(AccessDeniedException ex) {
