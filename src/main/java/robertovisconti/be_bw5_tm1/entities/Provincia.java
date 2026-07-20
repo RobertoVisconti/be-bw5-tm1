@@ -28,6 +28,6 @@ public class Provincia {
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false, length = 2)
+    @Column(nullable = false, unique = true, length = 2)
     private String sigla;
 }
