@@ -12,12 +12,14 @@ import robertovisconti.be_bw5_tm1.repositories.UtenteRepository;
 public class UtenteService {
 
     private UtenteRepository utenteRepository;
+    private RuoloService ruoloService;
 
     public Utente save(UtenteDTO body) {
         Ruolo newRuolo = new Ruolo(body.ruolo().toUpperCase());
+        // TODO creare un find che cerchi se il ruolo assegnato all'utente già esiste, in quel caso dare quello come Ruolo, altrimenti si crea
+        Ruolo saved = this.ruoloService.saveFromUtente(newRuolo);
 
-
-        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email(), body.password(), newRuolo);
+        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email(), body.password(), saved);
         return this.utenteRepository.save(newUtente);
 
     }

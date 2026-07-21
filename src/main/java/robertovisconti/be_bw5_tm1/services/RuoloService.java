@@ -20,4 +20,9 @@ public class RuoloService {
 
         return newRuolo;
     }
+
+    public Ruolo saveFromUtente(Ruolo ruolo) {
+        return this.ruoloRepository.save(ruolo);
+
+    }
 }
