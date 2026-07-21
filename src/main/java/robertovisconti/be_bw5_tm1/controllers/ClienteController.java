@@ -81,6 +81,7 @@ public class ClienteController {
         return clienteService.filterByDataInserimento(inizio, fine, pageable);
     }
 
+    @GetMapping("/search/data-ultimo-contatto")
     public Page<Cliente> filterByDataUltimoContatto(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inizio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fine,
