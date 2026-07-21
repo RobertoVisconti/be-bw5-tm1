@@ -15,6 +15,9 @@ import java.util.UUID;
 @Setter
 public class Utente {
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    Ruolo ruolo;
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -33,11 +36,12 @@ public class Utente {
     private String avatar;
 
 
-    public Utente(String nome, String cognome, String username, String email, String password) {
+    public Utente(String nome, String cognome, String username, String email, String password, Ruolo ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.username = username;
         this.email = email;
         this.password = password;
+        this.ruolo = ruolo;
     }
 }
