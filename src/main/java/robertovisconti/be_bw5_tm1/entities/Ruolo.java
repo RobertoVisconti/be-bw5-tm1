@@ -10,7 +10,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "utenti")
+@Table(name = "ruoli")
 @Getter
 @Setter
 public class Ruolo {
