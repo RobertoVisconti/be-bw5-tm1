@@ -6,7 +6,7 @@ import java.util.UUID;
 
 @Entity
 @Table
-public class IdStatoFattura {
+public class StatoFattura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
