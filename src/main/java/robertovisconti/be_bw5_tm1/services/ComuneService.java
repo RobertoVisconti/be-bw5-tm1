@@ -29,6 +29,9 @@ public class ComuneService {
     private static final Set<String> PAROLE_DA_IGNORARE =
             Set.of("e", "di", "d", "della", "nell", "del", "dei", "delle", "la", "le");
 
+    private static final Map<String, String> ALIAS_PROVINCE =
+            Map.of("Verbano-Cusio-Ossola", "Verbania");
+
     private ComuneRepository comuneRepository;
     private ProvinciaRepository provinciaRepository;
 
@@ -81,8 +84,14 @@ public class ComuneService {
 
                 String nomeComune = pulisci(campi[2]);
                 String nomeProvinciaRiga = pulisci(campi[3]);
+                nomeProvinciaRiga = ALIAS_PROVINCE.getOrDefault(nomeProvinciaRiga, nomeProvinciaRiga);
 
                 Provincia provincia = trovaProvincia(nomeProvinciaRiga, provinceByNomeCanonico);
+                if (provincia == null && nomeProvinciaRiga.equals("Sud Sardegna")) {
+                    provincia = new Provincia("Sud Sardegna", "SU");
+                    provinciaRepository.save(provincia);
+                    provinceByNomeCanonico.put(normalizza("Sud Sardegna"), provincia);
+                }
                 if (provincia == null) continue;
 
                 daSalvare.add(new Comune(nomeComune, provincia));
