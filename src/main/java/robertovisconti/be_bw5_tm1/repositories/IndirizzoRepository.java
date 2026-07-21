@@ -13,6 +13,4 @@ public interface IndirizzoRepository extends JpaRepository<Indirizzo, UUID> {
     List<Indirizzo> findByComune_Nome(String nomeComune);
 
     List<Indirizzo> findByComune_Provincia_Nome(String nomeProvincia);
-
-    List<Indirizzo> findByComune_Provincia_Regione(String regione);
 }
