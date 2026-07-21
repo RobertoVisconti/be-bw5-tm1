@@ -31,8 +31,8 @@ public record ClienteDTO(
         String logoAziendale,
 
         @NotNull(message = "Il tipo cliente è obbligatorio!")
-        TipoCliente tipoCliente
-        
+        TipoCliente tipoCliente,
+
         UUID idSedeLegale,
         UUID idSedeOperativa
 ) {

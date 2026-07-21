@@ -6,10 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
+import robertovisconti.be_bw5_tm1.entities.Indirizzo;
 import robertovisconti.be_bw5_tm1.exceptions.BadRequestException;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
+import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -19,9 +21,11 @@ import java.util.UUID;
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
+    private final IndirizzoRepository indirizzoRepository;
 
-    public ClienteService(ClienteRepository clienteRepository) {
+    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository) {
         this.clienteRepository = clienteRepository;
+        this.indirizzoRepository = indirizzoRepository;
     }
 
     // CREAZIONE CLIENTE
@@ -41,6 +45,18 @@ public class ClienteService {
         cliente.setCognomeContatto(body.cognomeContatto());
         cliente.setLogoAziendale(body.logoAziendale());
         cliente.setTipoCliente(body.tipoCliente());
+        cliente.setDataUltimoContatto(LocalDateTime.now());
+
+        if (body.idSedeLegale() != null) {
+            Indirizzo sedeLegale = indirizzoRepository.findById(body.idSedeLegale()).orElseThrow(() -> new NotFoundException("Sede legale non trovata!"));
+            cliente.setSedeLegale(sedeLegale);
+        }
+        if (body.idSedeOperativa() != null) {
+            Indirizzo sedeOperativa = indirizzoRepository.findById(body.idSedeOperativa()).orElseThrow(() -> new NotFoundException("Sede Operativa non trovata!"));
+            cliente.setSedeOperativa(sedeOperativa);
+        }
+
+        return clienteRepository.save(cliente);
 
     }
 
@@ -68,6 +84,17 @@ public class ClienteService {
         cliente.setTipoCliente(body.tipoCliente());
 
         cliente.setDataUltimoContatto(LocalDateTime.now());
+
+        if (body.idSedeLegale() != null) {
+            Indirizzo sedeLegale = indirizzoRepository.findById(body.idSedeLegale()).orElseThrow(() -> new NotFoundException("Sede legale non trovata!"));
+            cliente.setSedeLegale(sedeLegale);
+        }
+        if (body.idSedeOperativa() != null) {
+            Indirizzo sedeOperativa = indirizzoRepository.findById(body.idSedeOperativa()).orElseThrow(() -> new NotFoundException("Sede Operativa non trovata!"));
+            cliente.setSedeOperativa(sedeOperativa);
+        }
+
+        return clienteRepository.save(cliente);
 
     }
 
