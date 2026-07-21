@@ -1,29 +1,23 @@
 package robertovisconti.be_bw5_tm1.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.UUID;
 
+@NoArgsConstructor
 @Entity
-@Table(name = "comune")
+@Table(name = "comuni")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Comune {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Setter(AccessLevel.NONE)
     @Column(name = "id_comune")
     private UUID id;
 
@@ -33,4 +27,9 @@ public class Comune {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_provincia", nullable = false)
     private Provincia provincia;
+
+    public Comune(String nome, Provincia provincia) {
+        this.nome = nome;
+        this.provincia = provincia;
+    }
 }

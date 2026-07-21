@@ -22,4 +22,8 @@ public class Ruolo {
 
     @Column(nullable = false)
     private String ruolo;
+
+    public Ruolo(String ruolo) {
+        this.ruolo = ruolo;
+    }
 }
