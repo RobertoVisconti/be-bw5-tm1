@@ -13,12 +13,13 @@ import java.util.UUID;
 @Table(name = "utenti")
 @Getter
 @Setter
-public class Ruoli {
+public class Ruolo {
 
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     private UUID id;
+
     @Column(nullable = false)
     private String ruolo;
 }

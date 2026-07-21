@@ -13,7 +13,7 @@ import java.util.UUID;
 @Table(name = "utente_ruoli")
 @Getter
 @Setter
-public class UtenteRuoli {
+public class UtenteRuolo {
     @Id
     @GeneratedValue
     @Setter(AccessLevel.NONE)
@@ -26,4 +26,10 @@ public class UtenteRuoli {
     @ManyToOne
     @JoinColumn(name = "id_ruolo")
     private Ruolo ruolo;
+
+    public UtenteRuolo(Utente utente, Ruolo ruolo) {
+        this.ruolo = ruolo;
+        this.utente = utente;
+    }
+    
 }
