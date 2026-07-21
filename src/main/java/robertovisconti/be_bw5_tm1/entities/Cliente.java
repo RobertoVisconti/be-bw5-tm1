@@ -32,7 +32,7 @@ public class Cliente {
     private LocalDateTime dataUltimoContatto;
 
     @Column(name = "fatturato_annuale")
-    private Double fatturatoAnnuale;
+    private double fatturatoAnnuale;
 
     @Column(unique = true)
     private String pec;
@@ -55,6 +55,10 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_cliente", nullable = false)
     private TipoCliente tipoCliente;
+
+    // softDelete
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
 
     public Cliente(String ragioneSociale, String partitaIva, LocalDateTime dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String logoAziendale, TipoCliente tipoCliente) {
         this.ragioneSociale = ragioneSociale;
@@ -112,6 +116,14 @@ public class Cliente {
 
     public void setRagioneSociale(String ragioneSociale) {
         this.ragioneSociale = ragioneSociale;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public void setDataUltimoContatto(LocalDateTime dataUltimoContatto) {
+        this.dataUltimoContatto = dataUltimoContatto;
     }
 
     @PrePersist
