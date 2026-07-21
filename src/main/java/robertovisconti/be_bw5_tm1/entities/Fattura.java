@@ -3,6 +3,7 @@ package robertovisconti.be_bw5_tm1.entities;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ import java.util.UUID;
 
 @Getter
 @Setter
+@NoArgsConstructor
 
 @Entity
 @Table(name = "fatture")
