@@ -17,7 +17,7 @@ public class Cliente {
     @Id
     @GeneratedValue
     @Column(name = "id_cliente")
-    private UUID idCliente;
+    private UUID id;
 
     @Column(name = "ragione_sociale", nullable = false)
     private String ragioneSociale;
@@ -61,7 +61,7 @@ public class Cliente {
     private Indirizzo sedeLegale;
 
     @ManyToOne
-    @Column(name = "sede_operativa")
+    @JoinColumn(name = "sede_operativa")
     private Indirizzo sedeOperativa;
 
     // softDelete
