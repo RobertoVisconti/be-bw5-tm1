@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import robertovisconti.be_bw5_tm1.entities.Utente;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ResponseDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.UtenteDTO;
 import robertovisconti.be_bw5_tm1.services.UtenteService;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/utenti")
@@ -23,6 +25,11 @@ public class UtenteController {
     public ResponseDTO save(@RequestBody @Validated UtenteDTO body) {
         Utente newUtente = this.utenteService.save(body);
         return new ResponseDTO("Utente creato correttamente", newUtente.getId(), LocalDateTime.now());
+    }
 
+
+    @PatchMapping("/{id}/avatar")
+    public String uploadLogo(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        return utenteService.uploadAvatar(id, file);
     }
 }
