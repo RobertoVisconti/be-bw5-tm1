@@ -2,13 +2,13 @@ package robertovisconti.be_bw5_tm1.repositories;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
+import robertovisconti.be_bw5_tm1.entities.StatoFattura;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -18,9 +18,12 @@ public interface FatturaRepository extends JpaRepository<Fattura, UUID> {
 
     Page<Fattura> findAll(Pageable pageable);
 
-    Page<Fattura> findByIdCliente(UUID idCliente, Pageable pageable);
+    @Query("""
+    SELECT f FROM Fattura f WHERE f.cliente.id = :uuid
+    """)
+    Page<Fattura> findByIdCliente(UUID uuid, Pageable pageable);
 
-    Page<Fattura> findByIdStatoFattura(UUID idStatoFattura, Pageable pageable);
+    Page<Fattura> findByStatoFattura(StatoFattura statoFattura, Pageable pageable);
 
     Page<Fattura> findByData(LocalDate data, Pageable pageable);
 
