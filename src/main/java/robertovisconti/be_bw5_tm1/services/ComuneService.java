@@ -36,6 +36,10 @@ public class ComuneService {
     private ProvinciaRepository provinciaRepository;
 
     public void importaComuniEProvince() throws IOException {
+        if (comuneRepository.count() > 0) {
+            return;
+        }
+
         Map<String, Provincia> provinceByNomeCanonico = importaProvince();
         importaComuni(provinceByNomeCanonico);
     }
