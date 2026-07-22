@@ -5,11 +5,11 @@ import jakarta.persistence.*;
 import java.util.UUID;
 
 @Entity
-@Table
-public class IdStatoFattura {
+@Table(name = "stato_fattura")
+public class StatoFattura {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private UUID id;
 
     @Column(unique = true)

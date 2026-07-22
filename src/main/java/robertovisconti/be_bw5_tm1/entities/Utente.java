@@ -43,5 +43,6 @@ public class Utente {
         this.email = email;
         this.password = password;
         this.ruolo = ruolo;
+        this.avatar = "https://picsum.photo/200";
     }
 }

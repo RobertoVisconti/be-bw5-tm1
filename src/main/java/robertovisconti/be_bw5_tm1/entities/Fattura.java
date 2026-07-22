@@ -10,7 +10,6 @@ import java.util.UUID;
 
 @Getter
 @Setter
-
 @Entity
 @Table(name = "fatture")
 public class Fattura {
@@ -31,21 +30,23 @@ public class Fattura {
     @Column(unique = true)
     private int numero;
 
-    @Column(name = "id_utente")
-    private UUID idUtente;
+    @ManyToOne
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
 
-    @Column(name = "id_stato_fattura")
-    private UUID idStatoFattura;
+    @ManyToOne
+    @JoinColumn(name = "id_stato_fattura")
+    private StatoFattura statoFattura;
 
 
     // constructor
 
-    public Fattura(LocalDate data, double importo, int numero, UUID idUtente, UUID idStatoFattura) {
+    public Fattura(LocalDate data, double importo, int numero, Cliente cliente, StatoFattura statoFattura) {
         this.data = data;
         this.importo = importo;
         this.numero = numero;
-        this.idUtente = idUtente;
-        this.idStatoFattura = idStatoFattura;
+        this.cliente = cliente;
+        this.statoFattura = statoFattura;
     }
 
 
@@ -58,8 +59,8 @@ public class Fattura {
                 ", data=" + data +
                 ", importo=" + importo +
                 ", numero=" + numero +
-                ", idUtente=" + idUtente +
-                ", idStatoFattura=" + idStatoFattura +
+                ", cliente=" + cliente +
+                ", statoFattura=" + statoFattura +
                 '}';
     }
 }
