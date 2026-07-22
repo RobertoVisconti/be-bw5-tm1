@@ -32,5 +32,5 @@ build/
 ### VS Code ###
 .vscode/
 
-
+/src/main/java/robertovisconti/be_bw5_tm1/tools/EmailSender.java
 env.properties
