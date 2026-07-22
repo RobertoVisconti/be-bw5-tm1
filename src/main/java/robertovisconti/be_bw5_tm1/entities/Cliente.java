@@ -17,7 +17,7 @@ public class Cliente {
     @Id
     @GeneratedValue
     @Column(name = "id_cliente")
-    private UUID idCliente;
+    private UUID id;
 
     @Column(name = "ragione_sociale", nullable = false)
     private String ragioneSociale;
@@ -32,7 +32,7 @@ public class Cliente {
     private LocalDateTime dataUltimoContatto;
 
     @Column(name = "fatturato_annuale")
-    private Double fatturatoAnnuale;
+    private double fatturatoAnnuale;
 
     @Column(unique = true)
     private String pec;
@@ -56,7 +56,20 @@ public class Cliente {
     @Column(name = "tipo_cliente", nullable = false)
     private TipoCliente tipoCliente;
 
-    public Cliente(String ragioneSociale, String partitaIva, LocalDateTime dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String logoAziendale, TipoCliente tipoCliente) {
+    @ManyToOne
+    @JoinColumn(name = "sede_legale")
+    private Indirizzo sedeLegale;
+
+    @ManyToOne
+    @JoinColumn(name = "sede_operativa")
+    private Indirizzo sedeOperativa;
+
+    // softDelete
+    @Column(name = "is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
+
+    public Cliente(String ragioneSociale, String partitaIva, LocalDateTime dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String logoAziendale, TipoCliente tipoCliente, Indirizzo sedeLegale, Indirizzo sedeOperativa) {
         this.ragioneSociale = ragioneSociale;
         this.partitaIva = partitaIva;
         this.dataUltimoContatto = dataUltimoContatto;
@@ -68,6 +81,8 @@ public class Cliente {
         this.cognomeContatto = cognomeContatto;
         this.logoAziendale = logoAziendale;
         this.tipoCliente = tipoCliente;
+        this.sedeLegale = sedeLegale;
+        this.sedeOperativa = sedeOperativa;
     }
 
     public void setPartitaIva(String partitaIva) {
@@ -112,6 +127,22 @@ public class Cliente {
 
     public void setRagioneSociale(String ragioneSociale) {
         this.ragioneSociale = ragioneSociale;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public void setDataUltimoContatto(LocalDateTime dataUltimoContatto) {
+        this.dataUltimoContatto = dataUltimoContatto;
+    }
+
+    public void setSedeLegale(Indirizzo sedeLegale) {
+        this.sedeLegale = sedeLegale;
+    }
+
+    public void setSedeOperativa(Indirizzo sedeOperativa) {
+        this.sedeOperativa = sedeOperativa;
     }
 
     @PrePersist
