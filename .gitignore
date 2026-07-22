@@ -32,5 +32,11 @@ build/
 ### VS Code ###
 .vscode/
 
+<<<<<<< Updated upstream
 
 env.properties
+=======
+/src/main/java/robertovisconti/be_bw5_tm1/tools/EmailSender.java
+env.properties
+src/main/java/robertovisconti/be_bw5_tm1/tools/EmailSender.java
+>>>>>>> Stashed changes

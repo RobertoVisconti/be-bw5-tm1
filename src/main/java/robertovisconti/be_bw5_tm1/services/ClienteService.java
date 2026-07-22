@@ -12,6 +12,10 @@ import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
 import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
+<<<<<<< Updated upstream
+=======
+import robertovisconti.be_bw5_tm1.specifications.ClienteSpecification;
+>>>>>>> Stashed changes
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -22,10 +26,21 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final IndirizzoRepository indirizzoRepository;
+<<<<<<< Updated upstream
 
     public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository) {
         this.clienteRepository = clienteRepository;
         this.indirizzoRepository = indirizzoRepository;
+=======
+    private final Cloudinary fileUploader;
+//    private final EmailSender emailSender;
+
+    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader) {
+        this.clienteRepository = clienteRepository;
+        this.indirizzoRepository = indirizzoRepository;
+        this.fileUploader = fileUploader;
+//        this.emailSender = emailSender;
+>>>>>>> Stashed changes
     }
 
     // CREAZIONE CLIENTE
@@ -56,7 +71,15 @@ public class ClienteService {
             cliente.setSedeOperativa(sedeOperativa);
         }
 
+<<<<<<< Updated upstream
         return clienteRepository.save(cliente);
+=======
+        Cliente savedCliente = clienteRepository.save(cliente);
+
+//        this.emailSender.sendRegistrationEmail(savedCliente);
+
+        return savedCliente;
+>>>>>>> Stashed changes
 
     }
 

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
@@ -27,8 +28,15 @@ public class ClienteController {
     // CRUD
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+<<<<<<< Updated upstream
     public Cliente createCliente(@RequestBody @Validated ClienteDTO body) {
         return clienteService.save(body);
+=======
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ClienteResponseDTO createCliente(@RequestBody @Validated ClienteDTO body) {
+        Cliente saved = clienteService.save(body);
+        return new ClienteResponseDTO(saved.getId(), "Il cliente è stato aggiunto con successo", LocalDateTime.now());
+>>>>>>> Stashed changes
     }
 
     @GetMapping("/{id}")
@@ -37,11 +45,25 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+<<<<<<< Updated upstream
     public Cliente updateCliente(@PathVariable UUID id, @RequestBody @Validated ClienteDTO body) {
         return clienteService.update(id, body);
+=======
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public ClienteResponseDTO updateCliente(@PathVariable UUID id, @RequestBody @Validated ClienteDTO body) {
+        Cliente update = clienteService.update(id, body);
+        return new ClienteResponseDTO(update.getId(), "I campi sono stati aggiornati correttamente", LocalDateTime.now());
+    }
+
+    @PatchMapping("/{id}/logo")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
+    public String uploadLogo(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        return clienteService.uploadLogo(id, file);
+>>>>>>> Stashed changes
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public void deleteCliente(@PathVariable UUID id) {
         clienteService.delete(id);
     }
