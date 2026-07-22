@@ -7,8 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
+import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteResponseDTO;
 import robertovisconti.be_bw5_tm1.services.ClienteService;
 
 import java.time.LocalDateTime;
@@ -27,8 +29,9 @@ public class ClienteController {
     // CRUD
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Cliente createCliente(@RequestBody @Validated ClienteDTO body) {
-        return clienteService.save(body);
+    public ClienteResponseDTO createCliente(@RequestBody @Validated ClienteDTO body) {
+        Cliente saved = clienteService.save(body);
+        return new ClienteResponseDTO(saved.getId(), "Il cliente è stato aggiunto con successo", LocalDateTime.now());
     }
 
     @GetMapping("/{id}")
@@ -37,8 +40,14 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
-    public Cliente updateCliente(@PathVariable UUID id, @RequestBody @Validated ClienteDTO body) {
-        return clienteService.update(id, body);
+    public ClienteResponseDTO updateCliente(@PathVariable UUID id, @RequestBody @Validated ClienteDTO body) {
+        Cliente update = clienteService.update(id, body);
+        return new ClienteResponseDTO(update.getId(), "I campi sono stati aggiornati correttamente", LocalDateTime.now());
+    }
+
+    @PatchMapping("/{id}/logo")
+    public String uploadLogo(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
+        return clienteService.uploadLogo(id, file);
     }
 
     @DeleteMapping("/{id}")
