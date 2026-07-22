@@ -5,8 +5,11 @@ import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.Ruolo;
 import robertovisconti.be_bw5_tm1.entities.Utente;
 import robertovisconti.be_bw5_tm1.exceptions.AlreadyRegisteredUserException;
+import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.UtenteDTO;
 import robertovisconti.be_bw5_tm1.repositories.UtenteRepository;
+
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -23,6 +26,15 @@ public class UtenteService {
 
         Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email(), body.password(), saved);
         return this.utenteRepository.save(newUtente);
+
+    }
+
+    public Utente findById(UUID id) {
+        return this.utenteRepository.findById(id).orElseThrow(() -> new NotFoundException("Utente non trovato"));
+    }
+
+    public Utente findMyEmail(String email) {
+        return this.utenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente non trovato"));
 
     }
 }
