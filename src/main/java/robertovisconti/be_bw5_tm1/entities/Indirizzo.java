@@ -37,21 +37,20 @@ public class Indirizzo {
     @JoinColumn(name = "id_comune", nullable = false)
     private Comune comune;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "id_cliente", nullable = false)
-    private Cliente cliente;
+//    @ManyToOne(optional = false)
+//    @JoinColumn(name = "id_cliente", nullable = false)
+//    private Cliente cliente;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoIndirizzo tipo;
 
-    public Indirizzo(String via, String civico, String localita, String cap, Comune comune, Cliente cliente, TipoIndirizzo tipo) {
+    public Indirizzo(String via, String civico, String localita, String cap, Comune comune, TipoIndirizzo tipo) {
         this.via = via;
         this.civico = civico;
         this.localita = localita;
         this.cap = cap;
         this.comune = comune;
-        this.cliente = cliente;
         this.tipo = tipo;
     }
 }
