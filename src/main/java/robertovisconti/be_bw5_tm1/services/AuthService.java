@@ -15,7 +15,7 @@ public class AuthService {
     private TokenToolkit tokenToolkit;
 
     public String login(LoginDTO body) {
-        Utente found = this.utenteService.findMyEmail(body.email());
+        Utente found = this.utenteService.findByEmailIgnoreCase(body.email().toLowerCase().trim());
         if (!found.getPassword().equals(body.password())) throw new UnauthorizedException("Password errata");
 
         return this.tokenToolkit.tokenGenerator(found);

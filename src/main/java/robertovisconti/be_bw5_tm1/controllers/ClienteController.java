@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,7 @@ public class ClienteController {
     // CRUD
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public ClienteResponseDTO createCliente(@RequestBody @Validated ClienteDTO body) {
         Cliente saved = clienteService.save(body);
         return new ClienteResponseDTO(saved.getId(), "Il cliente è stato aggiunto con successo", LocalDateTime.now());
@@ -42,17 +44,20 @@ public class ClienteController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public ClienteResponseDTO updateCliente(@PathVariable UUID id, @RequestBody @Validated ClienteDTO body) {
         Cliente update = clienteService.update(id, body);
         return new ClienteResponseDTO(update.getId(), "I campi sono stati aggiornati correttamente", LocalDateTime.now());
     }
 
     @PatchMapping("/{id}/logo")
+    @PreAuthorize("hasAnyAuthority('ADMIN')")
     public String uploadLogo(@PathVariable UUID id, @RequestParam("file") MultipartFile file) {
         return clienteService.uploadLogo(id, file);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void deleteCliente(@PathVariable UUID id) {
         clienteService.delete(id);
     }

@@ -25,12 +25,12 @@ public class UtenteService {
     private RuoloService ruoloService;
 
     public Utente save(UtenteDTO body) {
-        if (this.utenteRepository.existsByEmail(body.email())) {
+        if (this.utenteRepository.existsByEmail(body.email().toLowerCase().trim())) {
             throw new AlreadyRegisteredUserException("La mail risulta già registrata");
         }
         Ruolo saved = this.ruoloService.findByRuolo(body.ruolo().toUpperCase());
 
-        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email(), body.password(), saved);
+        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email().toLowerCase().trim(), body.password(), saved);
         return this.utenteRepository.save(newUtente);
 
     }
@@ -39,8 +39,8 @@ public class UtenteService {
         return this.utenteRepository.findById(id).orElseThrow(() -> new NotFoundException("Utente non trovato"));
     }
 
-    public Utente findMyEmail(String email) {
-        return this.utenteRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Utente non trovato"));
+    public Utente findByEmailIgnoreCase(String email) {
+        return this.utenteRepository.findByEmail(email.toLowerCase().trim()).orElseThrow(() -> new NotFoundException("Utente non trovato"));
 
     }
 
