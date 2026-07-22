@@ -39,6 +39,12 @@ public class ClienteService {
         if (clienteRepository.existsByPartitaIvaAndIsDeletedFalse(body.partitaIva())) {
             throw new BadRequestException("La partita IVA " + body.partitaIva() + " appartiene già ad un altro cliente!");
         }
+        if (clienteRepository.existsByPecAndIsDeletedFalse(body.pec())) {
+            throw new BadRequestException("La pec " + body.pec() + " appartiene già ad un altro cliente!");
+        }
+        if (clienteRepository.existsByEmailContattoAndIsDeletedFalse(body.emailContatto())) {
+            throw new BadRequestException("L'email " + body.emailContatto() + " appartiene già ad un altro cliente!");
+        }
 
         Cliente cliente = new Cliente();
 
@@ -75,8 +81,22 @@ public class ClienteService {
     public Cliente update(UUID id, ClienteDTO body) {
         Cliente cliente = findById(id);
 
-        if (!cliente.getPartitaIva().equals(body.partitaIva()) && clienteRepository.existsByPartitaIvaAndIsDeletedFalse(body.partitaIva())) {
-            throw new BadRequestException("La partita IVA " + body.partitaIva() + " appartiene già ad un altro cliente!");
+        if (body.partitaIva() != null && !body.partitaIva().equals(cliente.getPartitaIva())) {
+            if (clienteRepository.existsByPartitaIvaAndIsDeletedFalse(body.partitaIva())) {
+                throw new BadRequestException("La partita IVA " + body.partitaIva() + " appartiene già ad un altro cliente!");
+            }
+
+            if (body.pec() != null && !body.pec().equals(cliente.getPec())) {
+                if (clienteRepository.existsByPecAndIsDeletedFalse(body.pec())) {
+                    throw new BadRequestException("La PEC " + body.pec() + " appartiene già ad un altro cliente!");
+                }
+            }
+
+            if (body.emailContatto() != null && !body.emailContatto().equals(cliente.getEmailContatto())) {
+                if (clienteRepository.existsByEmailContattoAndIsDeletedFalse(body.emailContatto())) {
+                    throw new BadRequestException("L'email " + body.emailContatto() + " appartiene già un altro cliente!");
+                }
+            }
         }
 
         cliente.setRagioneSociale(body.ragioneSociale());

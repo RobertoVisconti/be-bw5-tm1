@@ -13,6 +13,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID> {
 
     boolean existsByPartitaIvaAndIsDeletedFalse(String partitaIva);
 
+    boolean existsByPecAndIsDeletedFalse(String pec);
+
+    boolean existsByEmailContattoAndIsDeletedFalse(String emailContatto);
+
+
     Optional<Cliente> findByIdAndIsDeletedFalse(UUID id);
 
     Page<Cliente> findByIsDeletedFalse(Pageable pageable);
