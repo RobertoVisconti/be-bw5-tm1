@@ -6,7 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
+import robertovisconti.be_bw5_tm1.entities.StatoFattura;
+import robertovisconti.be_bw5_tm1.exceptions.BadRequestException;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaUpdateFatturaDTO;
@@ -33,9 +36,9 @@ public class FatturaService {
         Fattura nuovaFattura = new Fattura();
         nuovaFattura.setData(payload.data());
         nuovaFattura.setNumero(payload.numero());
-        nuovaFattura.setIdUtente(payload.idUtente());
+        nuovaFattura.setCliente(payload.cliente());
         nuovaFattura.setImporto(payload.importo());
-        nuovaFattura.setIdStatoFattura(payload.idStatoFattura());
+        nuovaFattura.setStatoFattura(payload.statoFattura());
 
         return this.fatturaRepository.save(nuovaFattura);
     }
@@ -48,10 +51,11 @@ public class FatturaService {
 
 
     /// FIND BY ID CLIENTE
-    public Page<Fattura> findByIdCliente(UUID id, int page, int size) {
+    public Page<Fattura> findByIdCliente(UUID uuid, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
-        return this.fatturaRepository.findByIdCliente(id, pageable);
+        return this.fatturaRepository.findByIdCliente(uuid, pageable);
     }
+
 
 
     /// FIND BY DATA
@@ -70,15 +74,16 @@ public class FatturaService {
 
     /// FIND BY MESE
     public Page<Fattura> findByMese(int mese, int page, int size) {
+        if (mese < 1 || mese > 12) { throw new BadRequestException("Month not valid."); };
         Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
         return this.fatturaRepository.findByMese(mese, pageable);
     }
 
 
     /// FIND BY ID STATO FATTURA
-    public Page<Fattura> findByIdStatoFattura(UUID id, int page, int size) {
+    public Page<Fattura> findByStatoFattura(StatoFattura statoFattura, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
-        return this.fatturaRepository.findByIdStatoFattura(id, pageable);
+        return this.fatturaRepository.findByStatoFattura(statoFattura, pageable);
     }
 
 
@@ -100,7 +105,7 @@ public class FatturaService {
     public Fattura updateFattura(UUID id, RichiestaUpdateFatturaDTO payload) {
         Fattura fatturaTrovata = findById(id);
 
-        fatturaTrovata.setIdStatoFattura(payload.idStatoFattura());
+        fatturaTrovata.setStatoFattura(payload.statoFattura());
         return this.fatturaRepository.save(fatturaTrovata);
     }
 
