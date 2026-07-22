@@ -11,7 +11,7 @@ import java.util.UUID;
 
 @NoArgsConstructor
 @Entity
-@Table(name = "indirizzi", uniqueConstraints = @UniqueConstraint(columnNames = {"id_cliente", "tipo"}))
+@Table(name = "indirizzi")
 @Getter
 @Setter
 public class Indirizzo {
@@ -36,10 +36,6 @@ public class Indirizzo {
     @ManyToOne(optional = false)
     @JoinColumn(name = "id_comune", nullable = false)
     private Comune comune;
-
-//    @ManyToOne(optional = false)
-//    @JoinColumn(name = "id_cliente", nullable = false)
-//    private Cliente cliente;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
