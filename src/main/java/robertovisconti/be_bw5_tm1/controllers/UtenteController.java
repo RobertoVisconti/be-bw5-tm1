@@ -4,8 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import robertovisconti.be_bw5_tm1.entities.Utente;
+import robertovisconti.be_bw5_tm1.payloadsDTO.ResponseDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.UtenteDTO;
 import robertovisconti.be_bw5_tm1.services.UtenteService;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/utenti")
@@ -16,7 +20,9 @@ public class UtenteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void save(@RequestBody @Validated UtenteDTO body) {
-        this.utenteService.save(body);
+    public ResponseDTO save(@RequestBody @Validated UtenteDTO body) {
+        Utente newUtente = this.utenteService.save(body);
+        return new ResponseDTO("Utente creato correttamente", newUtente.getId(), LocalDateTime.now());
+
     }
 }
