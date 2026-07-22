@@ -1,6 +1,7 @@
 package robertovisconti.be_bw5_tm1.controllers;
 
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +24,7 @@ public class StatoFatturaController {
     }
 
 
+
     // *******************  methods  *********************************************************
 
     /// GET [...](http://localhost:PORT/stato-fattura)
@@ -36,7 +38,7 @@ public class StatoFatturaController {
     /// GET [...](http://localhost:PORT/stato-fattura/titolo_fattura)
     @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
     @GetMapping("/{titolo_fattura}")
-    public StatoFattura findByTitolo(@RequestParam String titolo) {
+    public  StatoFattura findByTitolo(@RequestParam String titolo) {
         return this.statoFatturaService.findByTitolo(titolo.toUpperCase());
     }
 

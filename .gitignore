@@ -32,6 +32,7 @@ build/
 ### VS Code ###
 .vscode/
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 
 env.properties
@@ -40,3 +41,7 @@ env.properties
 env.properties
 src/main/java/robertovisconti/be_bw5_tm1/tools/EmailSender.java
 >>>>>>> Stashed changes
+=======
+/src/main/java/robertovisconti/be_bw5_tm1/tools/EmailSender.java
+env.properties
+>>>>>>> develop
