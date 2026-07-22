@@ -29,6 +29,27 @@ public class FatturaController {
     // ********************  endpoints **********************************************************************
 
 
+    @GetMapping("/search")
+    public Page<Fattura> search(
+            @RequestParam(required = false) UUID clienteId,
+            @RequestParam(required = false) Integer anno,
+            @RequestParam(required = false) Integer mese,
+            @RequestParam(required = false) Double importoMin,
+            @RequestParam(required = false) Double importoMax,
+            @RequestParam(required = false) String statoFattura,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size) {
+
+        return this.fatturaService.search(clienteId, anno, mese, importoMin, importoMax,
+                statoFattura, page, size);
+    }
+
+
+
+
+
+    /*
+
     /// SAVE - POST [...](http://localhost:PORT/fatture/crea) + {payload} ---> 201 CREATED
     @PostMapping("/crea")
     @ResponseStatus(HttpStatus.CREATED)
@@ -98,7 +119,7 @@ public class FatturaController {
     @PutMapping()
 
 
-
+    */
 
 
 

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
@@ -14,6 +15,7 @@ import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaUpdateFatturaDTO;
 import robertovisconti.be_bw5_tm1.repositories.FatturaRepository;
+import robertovisconti.be_bw5_tm1.specifications.FatturaSpecification;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -32,6 +34,27 @@ public class FatturaService {
     }
 
     // ******************************  methods  ***************************************************
+
+
+
+    public Page<Fattura> search(UUID idCliente, Integer anno, Integer mese, Double importoMin, Double importoMax, String statoFattura, int page, int size) {
+        Specification<Fattura> spec = Specification
+                .where(FatturaSpecification.hasIdCliente(idCliente))
+                .and(FatturaSpecification.hasAnno(anno))
+                .and(FatturaSpecification.hasMese(mese))
+                .and(FatturaSpecification.importoBetween(importoMin, importoMax))
+                .and(FatturaSpecification.hasStatoFattura(statoFattura));
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by("data").descending());
+
+        return this.fatturaRepository.findAll(spec, pageable);
+    }
+
+
+
+
+    /*
+
 
     /// SAVE
     public Fattura save(RichiestaNuovaFatturaDTO payload) {
@@ -114,7 +137,7 @@ public class FatturaService {
         return this.fatturaRepository.save(fatturaTrovata);
     }
 
-
+    */
 
 
 }

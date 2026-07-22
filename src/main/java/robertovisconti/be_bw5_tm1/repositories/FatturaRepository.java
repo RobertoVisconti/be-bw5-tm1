@@ -19,9 +19,10 @@ import java.util.UUID;
 public interface FatturaRepository extends JpaRepository<Fattura, UUID>, JpaSpecificationExecutor<Fattura> {
 
 
-    // Page<Fattura> findAll(Specification<Fattura> spec, Pageable pageable);
 
 
+
+    /*
 
     Page<Fattura> findAll(Pageable pageable);
 
@@ -49,5 +50,7 @@ public interface FatturaRepository extends JpaRepository<Fattura, UUID>, JpaSpec
     """)
     Page<Fattura> findByRangeImporti(@Param("importoMinimo") int importoMinimo, @Param("importoMassimo") int importoMassimo, Pageable pageable);
 
+
+    */
 
 }
