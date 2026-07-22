@@ -2,7 +2,9 @@ package robertovisconti.be_bw5_tm1.controllers;
 
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -55,48 +57,74 @@ public class ClienteController {
         clienteService.delete(id);
     }
 
-    // LIST
     @GetMapping
-    public Page<Cliente> getAllClienti(
+    public Page<Cliente> getAllAndSearch(
+            @RequestParam(required = false) String nome,
+            @RequestParam(required = false) Double minFatturato,
+            @RequestParam(required = false) Double maxFatturato,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInserimentoInizio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataInserimentoFine,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataUltimoContattoInizio,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataUltimoContattoFine,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "ragioneSociale") String sortBy,
+            @RequestParam(defaultValue = "idCliente") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir
     ) {
-        return clienteService.findAll(page, size, sortBy, sortDir);
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        return clienteService.searchClienti(
+                nome,
+                minFatturato, maxFatturato,
+                dataInserimentoInizio, dataInserimentoFine,
+                dataUltimoContattoInizio, dataUltimoContattoFine,
+                pageable
+        );
     }
 
-    // FILTRI
-    @GetMapping("/search/nome")
-    public Page<Cliente> filterByNome(@RequestParam String nome, Pageable pageable) {
-        return clienteService.filterByNome(nome, pageable);
-    }
-
-    @GetMapping("/search/fatturato")
-    public Page<Cliente> filterByFatturato(
-            @RequestParam(required = false) Double min,
-            @RequestParam(required = false) Double max,
-            Pageable pageable
-    ) {
-        return clienteService.filterByFatturato(min, max, pageable);
-    }
-
-    @GetMapping("/search/data-inserimento")
-    public Page<Cliente> filterByDataInserimento(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fine,
-            Pageable pageable
-    ) {
-        return clienteService.filterByDataInserimento(inizio, fine, pageable);
-    }
-
-    @GetMapping("/search/data-ultimo-contatto")
-    public Page<Cliente> filterByDataUltimoContatto(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inizio,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fine,
-            Pageable pageable
-    ) {
-        return clienteService.filterByDataUltimoContatto(inizio, fine, pageable);
-    }
+//    // LIST
+//    @GetMapping
+//    public Page<Cliente> getAllClienti(
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int size,
+//            @RequestParam(defaultValue = "ragioneSociale") String sortBy,
+//            @RequestParam(defaultValue = "asc") String sortDir
+//    ) {
+//        return clienteService.findAll(page, size, sortBy, sortDir);
+//    }
+//
+//    // FILTRI
+//    @GetMapping("/search/nome")
+//    public Page<Cliente> filterByNome(@RequestParam String nome, Pageable pageable) {
+//        return clienteService.filterByNome(nome, pageable);
+//    }
+//
+//    @GetMapping("/search/fatturato")
+//    public Page<Cliente> filterByFatturato(
+//            @RequestParam(required = false) Double min,
+//            @RequestParam(required = false) Double max,
+//            Pageable pageable
+//    ) {
+//        return clienteService.filterByFatturato(min, max, pageable);
+//    }
+//
+//    @GetMapping("/search/data-inserimento")
+//    public Page<Cliente> filterByDataInserimento(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inizio,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fine,
+//            Pageable pageable
+//    ) {
+//        return clienteService.filterByDataInserimento(inizio, fine, pageable);
+//    }
+//
+//    @GetMapping("/search/data-ultimo-contatto")
+//    public Page<Cliente> filterByDataUltimoContatto(
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime inizio,
+//            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fine,
+//            Pageable pageable
+//    ) {
+//        return clienteService.filterByDataUltimoContatto(inizio, fine, pageable);
+//    }
 
 }
