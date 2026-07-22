@@ -11,6 +11,5 @@ public record RichiestaNuovaFatturaDTO(
         @NotBlank LocalDate data,
         @NotBlank double importo,
         @NotBlank int numero,
-        @NotBlank Cliente cliente,
-        StatoFattura statoFattura) {
+        @NotBlank Cliente cliente) {
 }

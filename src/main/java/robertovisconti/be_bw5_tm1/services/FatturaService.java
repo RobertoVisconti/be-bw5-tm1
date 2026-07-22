@@ -24,9 +24,11 @@ public class FatturaService {
     // dependency injection
 
     private final FatturaRepository fatturaRepository;
+    private final StatoFatturaService statoFatturaService;
 
-    public FatturaService(FatturaRepository fatturaRepository) {
+    public FatturaService(FatturaRepository fatturaRepository, StatoFatturaService statoFatturaService) {
         this.fatturaRepository = fatturaRepository;
+        this.statoFatturaService = statoFatturaService;
     }
 
     // ******************************  methods  ***************************************************
@@ -38,7 +40,10 @@ public class FatturaService {
         nuovaFattura.setNumero(payload.numero());
         nuovaFattura.setCliente(payload.cliente());
         nuovaFattura.setImporto(payload.importo());
-        nuovaFattura.setStatoFattura(payload.statoFattura());
+
+
+        StatoFattura statoBozza = this.statoFatturaService.findByTitolo("BOZZA");
+        nuovaFattura.setStatoFattura(statoBozza);
 
         return this.fatturaRepository.save(nuovaFattura);
     }

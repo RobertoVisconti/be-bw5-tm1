@@ -8,6 +8,7 @@ import java.util.UUID;
 public class FatturaSpecification {
 
     public Specification<Fattura> hasIdCliente(UUID uuid) {
-        return (root, query)
+        return (root, query, cb) ->
+            uuid == null ? null : cb.equal(root.get("cliente").get("id"), uuid);
     }
 }
