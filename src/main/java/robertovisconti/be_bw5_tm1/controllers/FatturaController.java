@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
+import robertovisconti.be_bw5_tm1.entities.StatoFattura;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.services.FatturaService;
@@ -79,8 +80,16 @@ public class FatturaController {
 
     /// FIND BY ID CLIENTE - GET [...](http://localhost:PORT/fatture/{id_cliente}) ---> 200 OK
     @GetMapping("/clienti/{id_cliente}")
-    public Page<Fattura> findByIdCliente(@RequestParam UUID uuid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+    public Page<Fattura> findByIdCliente(@RequestParam("id_cliente") UUID uuid, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
         return this.fatturaService.findByIdCliente(uuid, page, size);
+    }
+
+
+
+    /// FIND BY STATO FATTURA
+    @GetMapping("/{stato_fattura}")
+    public Page<Fattura> findByStatoFattura(@RequestParam("stato_fattura") StatoFattura statoFattura, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "20") int size) {
+        return this.fatturaService.findByStatoFattura(statoFattura, page, size);
     }
 
 
