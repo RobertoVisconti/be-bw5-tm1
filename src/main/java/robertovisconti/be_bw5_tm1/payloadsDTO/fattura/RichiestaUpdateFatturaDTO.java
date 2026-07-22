@@ -5,5 +5,5 @@ import jakarta.validation.constraints.NotBlank;
 
 import java.util.UUID;
 
-public record UpdateFatturaDTO(@NotBlank UUID idStatoFattura) {
+public record RichiestaUpdateFatturaDTO(@NotBlank UUID idStatoFattura) {
 }

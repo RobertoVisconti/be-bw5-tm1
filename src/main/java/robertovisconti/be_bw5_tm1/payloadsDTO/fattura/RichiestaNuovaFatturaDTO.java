@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record NuovaFatturaDTO(
+public record RichiestaNuovaFatturaDTO(
         @NotBlank LocalDate data,
         @NotBlank double importo,
         @NotBlank int numero,

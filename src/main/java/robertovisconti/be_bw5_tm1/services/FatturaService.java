@@ -8,8 +8,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.NuovaFatturaDTO;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.UpdateFatturaDTO;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaUpdateFatturaDTO;
 import robertovisconti.be_bw5_tm1.repositories.FatturaRepository;
 
 import java.time.LocalDate;
@@ -29,7 +29,7 @@ public class FatturaService {
     // ******************************  methods  ***************************************************
 
     /// SAVE
-    public Fattura save(NuovaFatturaDTO payload) {
+    public Fattura save(RichiestaNuovaFatturaDTO payload) {
         Fattura nuovaFattura = new Fattura();
         nuovaFattura.setData(payload.data());
         nuovaFattura.setNumero(payload.numero());
@@ -97,7 +97,7 @@ public class FatturaService {
 
 
     /// UPDATE
-    public Fattura updateFattura(UUID id, UpdateFatturaDTO payload) {
+    public Fattura updateFattura(UUID id, RichiestaUpdateFatturaDTO payload) {
         Fattura fatturaTrovata = findById(id);
 
         fatturaTrovata.setIdStatoFattura(payload.idStatoFattura());
