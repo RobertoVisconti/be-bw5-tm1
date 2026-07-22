@@ -3,9 +3,8 @@ package robertovisconti.be_bw5_tm1.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
@@ -15,10 +14,10 @@ import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
 import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
+import robertovisconti.be_bw5_tm1.specifications.ClienteSpecification;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
@@ -134,40 +133,66 @@ public class ClienteService {
         clienteRepository.save(cliente);
     }
 
-    // FIND ALL
-    public Page<Cliente> findAll(int page, int size, String sortBy, String sortDir) {
-        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return clienteRepository.findByIsDeletedFalse(pageable);
+    // FIND DINAMICO
+    public Page<Cliente> searchClienti(String nome,
+                                       Double minFatturato, Double maxFatturato,
+                                       LocalDateTime datainserimentoInizio, LocalDateTime dataInserimentoFine,
+                                       LocalDateTime dataUltimoContattoInizio, LocalDateTime dataUltimoContattoFine,
+                                       Pageable pageable) {
+        Specification<Cliente> spec = Specification.where(ClienteSpecification.isNotDeleted());
+
+        // applicazione filtri
+        if (nome == null || nome.isBlank()) {
+            spec = spec.and(ClienteSpecification.hasRagioneSociale(nome));
+        }
+        if (minFatturato != null || maxFatturato != null) {
+            spec = spec.and(ClienteSpecification.hasFatturatoBetween(minFatturato, maxFatturato));
+        }
+        if (datainserimentoInizio != null || dataInserimentoFine != null) {
+            spec = spec.and(ClienteSpecification.hasDataInserimentoBetween(datainserimentoInizio.with(LocalDateTime.MIN), dataInserimentoFine.with(LocalDateTime.MAX)));
+        }
+        if (dataUltimoContattoInizio != null || dataUltimoContattoFine != null) {
+            spec = spec.and(ClienteSpecification.hasDataUltimoContattoBetween(dataUltimoContattoInizio.with(LocalDateTime.MIN), dataUltimoContattoFine.with(LocalDateTime.MAX)));
+        }
+        return clienteRepository.findAll(spec, pageable);
+
+
     }
 
-    // FILTER NOME
-    public Page<Cliente> filterByNome(String nome, Pageable pageable) {
-        return clienteRepository.findByRagioneSocialeContainingIgnoreCaseAndIsDeletedFalse(nome, pageable);
-    }
-
-    // FILTER FATTURATO
-    public Page<Cliente> filterByFatturato(Double min, Double max, Pageable pageable) {
-        Double minVal = (min != null) ? min : 0.0;
-        Double maxVal = (max != null) ? max : Double.MAX_VALUE;
-        return clienteRepository.findByFatturatoAnnualeBetweenAndIsDeletedFalse(minVal, maxVal, pageable);
-    }
-
-    // FILTER DATA INSERIMENTO
-    public Page<Cliente> filterByDataInserimento(LocalDateTime inizio, LocalDateTime fine, Pageable pageable) {
-        LocalDateTime start = inizio.with(LocalTime.MIN);
-        LocalDateTime end = fine.with(LocalTime.MAX);
-
-        return clienteRepository.findByDataInserimentoBetweenAndIsDeletedFalse(start, end, pageable);
-    }
-
-    // FILTER DATA ULTIMO CONTATTO
-    public Page<Cliente> filterByDataUltimoContatto(LocalDateTime inizio, LocalDateTime fine, Pageable pageable) {
-        LocalDateTime start = inizio.with(LocalTime.MIN);
-        LocalDateTime end = fine.with(LocalTime.MAX);
-
-        return clienteRepository.findByDataUltimoContattoBetweenAndIsDeletedFalse(start, end, pageable);
-    }
+//    // FIND ALL
+//    public Page<Cliente> findAll(int page, int size, String sortBy, String sortDir) {
+//        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+//        Pageable pageable = PageRequest.of(page, size, sort);
+//        return clienteRepository.findByIsDeletedFalse(pageable);
+//    }
+//
+//    // FILTER NOME
+//    public Page<Cliente> filterByNome(String nome, Pageable pageable) {
+//        return clienteRepository.findByRagioneSocialeContainingIgnoreCaseAndIsDeletedFalse(nome, pageable);
+//    }
+//
+//    // FILTER FATTURATO
+//    public Page<Cliente> filterByFatturato(Double min, Double max, Pageable pageable) {
+//        Double minVal = (min != null) ? min : 0.0;
+//        Double maxVal = (max != null) ? max : Double.MAX_VALUE;
+//        return clienteRepository.findByFatturatoAnnualeBetweenAndIsDeletedFalse(minVal, maxVal, pageable);
+//    }
+//
+//    // FILTER DATA INSERIMENTO
+//    public Page<Cliente> filterByDataInserimento(LocalDateTime inizio, LocalDateTime fine, Pageable pageable) {
+//        LocalDateTime start = inizio.with(LocalTime.MIN);
+//        LocalDateTime end = fine.with(LocalTime.MAX);
+//
+//        return clienteRepository.findByDataInserimentoBetweenAndIsDeletedFalse(start, end, pageable);
+//    }
+//
+//    // FILTER DATA ULTIMO CONTATTO
+//    public Page<Cliente> filterByDataUltimoContatto(LocalDateTime inizio, LocalDateTime fine, Pageable pageable) {
+//        LocalDateTime start = inizio.with(LocalTime.MIN);
+//        LocalDateTime end = fine.with(LocalTime.MAX);
+//
+//        return clienteRepository.findByDataUltimoContattoBetweenAndIsDeletedFalse(start, end, pageable);
+//    }
 
     public String uploadLogo(UUID idCliente, MultipartFile file) {
         Cliente cliente = findById(idCliente);
