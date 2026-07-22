@@ -127,6 +127,11 @@ public class Cliente {
 
     public void setRagioneSociale(String ragioneSociale) {
         this.ragioneSociale = ragioneSociale;
+
+        if (this.logoAziendale == null || this.logoAziendale.isBlank()) {
+            String formattedName = (ragioneSociale != null) ? ragioneSociale.trim().replaceAll("\\s+", "+") : "C";
+            this.logoAziendale = "https://ui-avatars.com/api/?name=" + formattedName + "&background=0D6EFD&color=ffffff";
+        }
     }
 
     public void setDeleted(boolean deleted) {

@@ -1,10 +1,13 @@
 package robertovisconti.be_bw5_tm1.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Indirizzo;
 import robertovisconti.be_bw5_tm1.exceptions.BadRequestException;
@@ -13,6 +16,7 @@ import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
 import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -22,10 +26,12 @@ public class ClienteService {
 
     private final ClienteRepository clienteRepository;
     private final IndirizzoRepository indirizzoRepository;
+    private final Cloudinary fileUploader;
 
-    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository) {
+    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader) {
         this.clienteRepository = clienteRepository;
         this.indirizzoRepository = indirizzoRepository;
+        this.fileUploader = fileUploader;
     }
 
     // CREAZIONE CLIENTE
@@ -98,6 +104,7 @@ public class ClienteService {
 
     }
 
+
     // DELETE
     public void delete(UUID id) {
         Cliente cliente = this.findById(id);
@@ -141,4 +148,27 @@ public class ClienteService {
 
         return clienteRepository.findByDataUltimoContattoBetweenAndIsDeletedFalse(start, end, pageable);
     }
+
+    public String uploadLogo(UUID idCliente, MultipartFile file) {
+        Cliente cliente = findById(idCliente);
+
+        if (file != null && !file.isEmpty()) {
+            try {
+                String url = (String) fileUploader.uploader()
+                        .upload(file.getBytes(), ObjectUtils.emptyMap())
+                        .get("secure_url");
+
+                cliente.setLogoAziendale(url);
+                clienteRepository.save(cliente);
+
+                return url;
+
+            } catch (IOException ex) {
+                throw new RuntimeException("Errore durante l'upload del file logo", ex);
+            }
+        }
+
+        throw new BadRequestException("Il file inviato è vuoto!");
+    }
+
 }
