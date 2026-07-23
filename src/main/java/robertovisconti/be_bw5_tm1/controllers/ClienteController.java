@@ -63,6 +63,7 @@ public class ClienteController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN','SUPERADMIN')")
     public Page<Cliente> getAllAndSearch(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) Double minFatturato,
@@ -73,7 +74,7 @@ public class ClienteController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dataUltimoContattoFine,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "idCliente") String sortBy,
+            @RequestParam(defaultValue = "partitaIva") String sortBy,
             @RequestParam(defaultValue = "asc") String sortDir
     ) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
