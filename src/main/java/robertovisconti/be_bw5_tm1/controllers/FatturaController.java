@@ -1,16 +1,13 @@
 package robertovisconti.be_bw5_tm1.controllers;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
-import robertovisconti.be_bw5_tm1.entities.StatoFattura;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
+import robertovisconti.be_bw5_tm1.entities.Utente;
 import robertovisconti.be_bw5_tm1.services.FatturaService;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -30,7 +27,7 @@ public class FatturaController {
 
 
     @GetMapping("/search")
-    public Page<Fattura> search(
+    public Page<Fattura> searchMe(
             @RequestParam(required = false) UUID clienteId,
             @RequestParam(required = false) Integer anno,
             @RequestParam(required = false) Integer mese,
@@ -44,10 +41,26 @@ public class FatturaController {
                 statoFattura, page, size);
     }
 
-//TODO creare un endpoint /search/me per permettere al cliente di trovare le sue fatture
 
 
+    @GetMapping("/search/me")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    public Page<Fattura> search(
+            @RequestParam(required = false) Integer anno,
+            @RequestParam(required = false) Integer mese,
+            @RequestParam(required = false) Double importoMin,
+            @RequestParam(required = false) Double importoMax,
+            @RequestParam(required = false) String statoFattura,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication) {
 
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+        UUID clienteId = utenteAutenticato.getId();
+
+        return this.fatturaService.search(clienteId, anno, mese, importoMin, importoMax,
+                statoFattura, page, size);
+    }
 
     /*
 
