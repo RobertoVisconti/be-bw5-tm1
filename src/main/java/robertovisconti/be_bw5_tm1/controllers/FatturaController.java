@@ -2,11 +2,10 @@ package robertovisconti.be_bw5_tm1.controllers;
 
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
+import robertovisconti.be_bw5_tm1.entities.Utente;
 import robertovisconti.be_bw5_tm1.services.FatturaService;
 
 import java.util.UUID;
@@ -27,9 +26,8 @@ public class FatturaController {
     // ********************  endpoints **********************************************************************
 
 
-    @GetMapping
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN', 'SUPERADMIN')")
-    public Page<Fattura> search(
+    @GetMapping("/search")
+    public Page<Fattura> searchMe(
             @RequestParam(required = false) UUID clienteId,
             @RequestParam(required = false) Integer anno,
             @RequestParam(required = false) Integer mese,
@@ -45,6 +43,24 @@ public class FatturaController {
 
 
 
+    @GetMapping("/search/me")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN')")
+    public Page<Fattura> search(
+            @RequestParam(required = false) Integer anno,
+            @RequestParam(required = false) Integer mese,
+            @RequestParam(required = false) Double importoMin,
+            @RequestParam(required = false) Double importoMax,
+            @RequestParam(required = false) String statoFattura,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication) {
+
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+        UUID clienteId = utenteAutenticato.getId();
+
+        return this.fatturaService.search(clienteId, anno, mese, importoMin, importoMax,
+                statoFattura, page, size);
+    }
 
     /*
 
