@@ -15,6 +15,7 @@ import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
 import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
 import robertovisconti.be_bw5_tm1.specifications.ClienteSpecification;
+import robertovisconti.be_bw5_tm1.tools.EmailSender;
 
 
 import java.io.IOException;
@@ -27,13 +28,13 @@ public class ClienteService {
     private final ClienteRepository clienteRepository;
     private final IndirizzoRepository indirizzoRepository;
     private final Cloudinary fileUploader;
-//    private final EmailSender emailSender;
+    private final EmailSender emailSender;
 
-    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader) {
+    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader, EmailSender emailSender) {
         this.clienteRepository = clienteRepository;
         this.indirizzoRepository = indirizzoRepository;
         this.fileUploader = fileUploader;
-//        this.emailSender = emailSender;
+        this.emailSender = emailSender;
     }
 
     // CREAZIONE CLIENTE
@@ -72,7 +73,7 @@ public class ClienteService {
 
         Cliente savedCliente = clienteRepository.save(cliente);
 
-//        this.emailSender.sendRegistrationEmail(savedCliente);
+        this.emailSender.sendRegistrationEmail(savedCliente);
 
         return savedCliente;
 
