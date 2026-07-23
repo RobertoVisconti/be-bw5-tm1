@@ -3,6 +3,7 @@ package robertovisconti.be_bw5_tm1.services;
 import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.StatoFattura;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.StatoFatturaDTO;
 import robertovisconti.be_bw5_tm1.repositories.StatoFatturaRepository;
 
 import java.util.List;
@@ -24,7 +25,11 @@ public class StatoFatturaService {
         return this.statoFatturaRepository.findAll();
     }
 
+    public StatoFattura save(StatoFatturaDTO body) {
+        StatoFattura newStato = new StatoFattura(body.statoFattura().toUpperCase());
 
+        return this.statoFatturaRepository.save(newStato);
+    }
 
     public StatoFattura findByTitolo(String titolo) {
         return this.statoFatturaRepository.findByTitolo(titolo).orElseThrow(() -> new NotFoundException("Stato fattura non trovato."));

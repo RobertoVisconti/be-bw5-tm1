@@ -3,6 +3,7 @@ package robertovisconti.be_bw5_tm1.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import robertovisconti.be_bw5_tm1.entities.Ruolo;
@@ -23,6 +24,7 @@ public class UtenteService {
     private final Cloudinary fileUploader;
     private UtenteRepository utenteRepository;
     private RuoloService ruoloService;
+    private PasswordEncoder bcrypt;
 
     public Utente save(UtenteDTO body) {
         if (this.utenteRepository.existsByEmail(body.email().toLowerCase().trim())) {
@@ -30,7 +32,7 @@ public class UtenteService {
         }
         Ruolo saved = this.ruoloService.findByRuolo(body.ruolo().toUpperCase());
 
-        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email().toLowerCase().trim(), body.password(), saved);
+        Utente newUtente = new Utente(body.nome(), body.cognome(), body.username(), body.email().toLowerCase().trim(), this.bcrypt.encode(body.password()), saved);
         return this.utenteRepository.save(newUtente);
 
     }

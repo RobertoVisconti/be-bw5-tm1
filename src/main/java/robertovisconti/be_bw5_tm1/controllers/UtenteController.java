@@ -23,7 +23,7 @@ public class UtenteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-//    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public ResponseDTO save(@RequestBody @Validated UtenteDTO body) {
         Utente newUtente = this.utenteService.save(body);
         return new ResponseDTO("Utente creato correttamente", newUtente.getId(), LocalDateTime.now());
