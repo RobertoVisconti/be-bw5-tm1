@@ -63,7 +63,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('USER','ADMIN','SUPERADMIN')")
+//    @PreAuthorize("hasAnyAuthority('USER','ADMIN','SUPERADMIN')")
     public Page<Cliente> getAllAndSearch(
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) Double minFatturato,

@@ -37,6 +37,7 @@ public class SecurityConfig {
         // Vado ad eliminare il controllo di autenticazione su tutti gli end-point che fà Spring Security di default (401)
         httpSecurity.authorizeHttpRequests(request -> request.requestMatchers("/**").permitAll());
 
+        httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return httpSecurity.build();
     }
 
