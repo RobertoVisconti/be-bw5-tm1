@@ -1,16 +1,14 @@
 package robertovisconti.be_bw5_tm1.controllers;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
-import robertovisconti.be_bw5_tm1.entities.StatoFattura;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.services.FatturaService;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @RestController
@@ -29,7 +27,8 @@ public class FatturaController {
     // ********************  endpoints **********************************************************************
 
 
-    @GetMapping("/search")
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN', 'SUPERADMIN')")
     public Page<Fattura> search(
             @RequestParam(required = false) UUID clienteId,
             @RequestParam(required = false) Integer anno,
@@ -43,8 +42,6 @@ public class FatturaController {
         return this.fatturaService.search(clienteId, anno, mese, importoMin, importoMax,
                 statoFattura, page, size);
     }
-
-//TODO creare un endpoint /search/me per permettere al cliente di trovare le sue fatture
 
 
 
