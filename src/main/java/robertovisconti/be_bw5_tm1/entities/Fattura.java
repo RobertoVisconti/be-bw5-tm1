@@ -19,9 +19,9 @@ public class Fattura {
     // attributes
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
-    public UUID id;
+    private UUID id;
 
     @Column
     private LocalDate data;
