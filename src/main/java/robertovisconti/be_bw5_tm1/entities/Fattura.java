@@ -19,9 +19,9 @@ public class Fattura {
     // attributes
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue
     @Setter(AccessLevel.NONE)
-    public UUID id;
+    private UUID id;
 
     @Column
     private LocalDate data;
@@ -43,7 +43,7 @@ public class Fattura {
 
     // constructor
 
-    public Fattura(LocalDate data, double importo, int numero, Cliente cliente, StatoFattura statoFattura) {
+    public Fattura(LocalDate data, Double importo, Integer numero, Cliente cliente, StatoFattura statoFattura) {
         this.data = data;
         this.importo = importo;
         this.numero = numero;
