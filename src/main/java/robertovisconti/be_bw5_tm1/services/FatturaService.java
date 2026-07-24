@@ -42,14 +42,17 @@ public class FatturaService {
         nuovaFattura.setData(body.data());
         nuovaFattura.setImporto(body.importo());
         nuovaFattura.setNumero(body.numero());
-        Cliente found = this.clienteRepository.findById(body.cliente()).orElseThrow(() -> new NotFoundException("Cliente non trovato"));
+
+        Cliente found = this.clienteRepository.findById(body.clienteId())
+                .orElseThrow(() -> new NotFoundException("Cliente non trovato"));
         nuovaFattura.setCliente(found);
 
         StatoFattura statoDefault = statoFatturaService.findByTitolo("DA PAGARE");
         nuovaFattura.setStatoFattura(statoDefault);
-
         Fattura fatturaSalvata = this.fatturaRepository.save(nuovaFattura);
-
+        Double nuovoFatturato = this.fatturaRepository.sumImportoByClienteId(found.getId());
+        found.setFatturatoAnnuale(nuovoFatturato);
+        this.clienteRepository.save(found);
         return new RispostaNuovaFatturaDTO(fatturaSalvata.getId());
     }
 

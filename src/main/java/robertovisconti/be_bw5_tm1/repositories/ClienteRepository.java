@@ -17,14 +17,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>, JpaSpec
 
 
     Optional<Cliente> findByIdAndIsDeletedFalse(UUID id);
-
-//    Page<Cliente> findByIsDeletedFalse(Pageable pageable);
-
-//    Page<Cliente> findByRagioneSocialeContainingIgnoreCaseAndIsDeletedFalse(String ragioneSociale, Pageable pageable);
-//
-//    Page<Cliente> findByFatturatoAnnualeBetweenAndIsDeletedFalse(Double min, Double max, Pageable pageable);
-//
-//    Page<Cliente> findByDataInserimentoBetweenAndIsDeletedFalse(LocalDateTime inizio, LocalDateTime fine, Pageable pageable);
-//
-//    Page<Cliente> findByDataUltimoContattoBetweenAndIsDeletedFalse(LocalDateTime inizio, LocalDateTime fine, Pageable pageable);
+    
 }
