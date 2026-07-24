@@ -1,6 +1,7 @@
 package robertovisconti.be_bw5_tm1.services;
 
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,6 +37,7 @@ public class FatturaService {
 
     // ******************************  methods  ***************************************************
 
+    @Transactional
     public RispostaNuovaFatturaDTO save(RichiestaNuovaFatturaDTO body) {
 
         Fattura nuovaFattura = new Fattura();
@@ -49,7 +51,13 @@ public class FatturaService {
         nuovaFattura.setStatoFattura(statoDefault);
 
         Fattura fatturaSalvata = this.fatturaRepository.save(nuovaFattura);
+<<<<<<< Updated upstream
 
+=======
+        Double nuovoFatturato = this.fatturaRepository.sumImportoByClienteId(found.getId());
+        found.setFatturatoAnnuale(nuovoFatturato);
+        this.clienteRepository.saveAndFlush(found);
+>>>>>>> Stashed changes
         return new RispostaNuovaFatturaDTO(fatturaSalvata.getId());
     }
 
