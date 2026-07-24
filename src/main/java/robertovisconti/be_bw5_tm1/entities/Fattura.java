@@ -27,10 +27,10 @@ public class Fattura {
     private LocalDate data;
 
     @Column
-    private double importo;
+    private Double importo;
 
     @Column(unique = true)
-    private int numero;
+    private Integer numero;
 
     @ManyToOne
     @JoinColumn(name = "id_cliente")
@@ -43,14 +43,13 @@ public class Fattura {
 
     // constructor
 
-    public Fattura(LocalDate data, double importo, int numero, Cliente cliente, StatoFattura statoFattura) {
+    public Fattura(LocalDate data, Double importo, Integer numero, Cliente cliente, StatoFattura statoFattura) {
         this.data = data;
         this.importo = importo;
         this.numero = numero;
         this.cliente = cliente;
         this.statoFattura = statoFattura;
     }
-
 
 
     // to string
