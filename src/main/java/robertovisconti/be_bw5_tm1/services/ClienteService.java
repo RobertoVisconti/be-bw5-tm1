@@ -135,11 +135,11 @@ public class ClienteService {
     }
 
     // FATTURATO ANNUALE
-    public void aggiornaFatturatoAnnuale(UUID idCliente) {
+    public void aggiornaFatturatoAnnuale(UUID idCliente, int anno) {
         Cliente cliente = clienteRepository.findById(idCliente)
                 .orElseThrow(() -> new NotFoundException("Cliente non trovato"));
 
-        Double totaleFatturato = fatturaRepository.sumImportoByClienteId(idCliente);
+        Double totaleFatturato = fatturaRepository.sumImportoByClienteIdAndAnno(idCliente, anno);
 
         cliente.setFatturatoAnnuale(totaleFatturato);
 

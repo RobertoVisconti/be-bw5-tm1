@@ -50,9 +50,13 @@ public class FatturaService {
         StatoFattura statoDefault = statoFatturaService.findByTitolo("DA PAGARE");
         nuovaFattura.setStatoFattura(statoDefault);
 
-        Fattura fatturaSalvata = this.fatturaRepository.save(nuovaFattura);
+        Fattura fatturaSalvata = this.fatturaRepository.saveAndFlush(nuovaFattura);
 
-        Double nuovoFatturato = this.fatturaRepository.sumImportoByClienteId(found.getId());
+        Double nuovoFatturato = this.fatturaRepository.sumImportoByClienteIdAndAnno(
+                found.getId(),
+                body.data().getYear()
+        );
+
         found.setFatturatoAnnuale(nuovoFatturato);
         this.clienteRepository.saveAndFlush(found);
 

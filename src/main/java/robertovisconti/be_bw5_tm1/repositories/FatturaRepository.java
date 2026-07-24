@@ -13,8 +13,11 @@ import java.util.UUID;
 public interface FatturaRepository extends JpaRepository<Fattura, UUID>, JpaSpecificationExecutor<Fattura> {
 
 
-    @Query("SELECT COALESCE(SUM(f.importo), 0.0) FROM Fattura f WHERE f.cliente.id = :idCliente")
-    Double sumImportoByClienteId(@Param("idCliente") UUID idCliente);
+    @Query("SELECT COALESCE(SUM(f.importo), 0.0) FROM Fattura f " +
+            "WHERE f.cliente.id = :idCliente " +
+            "AND YEAR(f.data) = :anno " +
+            "AND f.statoFattura.titolo != 'ANNULLATA'")
+    Double sumImportoByClienteIdAndAnno(@Param("idCliente") UUID idCliente, @Param("anno") int anno);
 
 
 
