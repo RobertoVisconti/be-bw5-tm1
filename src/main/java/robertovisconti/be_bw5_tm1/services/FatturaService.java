@@ -51,13 +51,11 @@ public class FatturaService {
         nuovaFattura.setStatoFattura(statoDefault);
 
         Fattura fatturaSalvata = this.fatturaRepository.save(nuovaFattura);
-<<<<<<< Updated upstream
 
-=======
         Double nuovoFatturato = this.fatturaRepository.sumImportoByClienteId(found.getId());
         found.setFatturatoAnnuale(nuovoFatturato);
         this.clienteRepository.saveAndFlush(found);
->>>>>>> Stashed changes
+
         return new RispostaNuovaFatturaDTO(fatturaSalvata.getId());
     }
 
