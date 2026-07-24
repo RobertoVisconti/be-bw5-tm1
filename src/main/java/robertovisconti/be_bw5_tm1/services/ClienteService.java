@@ -13,6 +13,7 @@ import robertovisconti.be_bw5_tm1.exceptions.BadRequestException;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.ClienteDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
+import robertovisconti.be_bw5_tm1.repositories.FatturaRepository;
 import robertovisconti.be_bw5_tm1.repositories.IndirizzoRepository;
 import robertovisconti.be_bw5_tm1.specifications.ClienteSpecification;
 import robertovisconti.be_bw5_tm1.tools.EmailSender;
@@ -29,12 +30,14 @@ public class ClienteService {
     private final IndirizzoRepository indirizzoRepository;
     private final Cloudinary fileUploader;
     private final EmailSender emailSender;
+    private final FatturaRepository fatturaRepository;
 
-    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader, EmailSender emailSender) {
+    public ClienteService(ClienteRepository clienteRepository, IndirizzoRepository indirizzoRepository, Cloudinary fileUploader, EmailSender emailSender, FatturaRepository fatturaRepository) {
         this.clienteRepository = clienteRepository;
         this.indirizzoRepository = indirizzoRepository;
         this.fileUploader = fileUploader;
         this.emailSender = emailSender;
+        this.fatturaRepository = fatturaRepository;
     }
 
     // CREAZIONE CLIENTE
@@ -129,6 +132,18 @@ public class ClienteService {
 
         return clienteRepository.save(cliente);
 
+    }
+
+    // FATTURATO ANNUALE
+    public void aggiornaFatturatoAnnuale(UUID idCliente) {
+        Cliente cliente = clienteRepository.findById(idCliente)
+                .orElseThrow(() -> new NotFoundException("Cliente non trovato"));
+
+        Double totaleFatturato = fatturaRepository.sumImportoByClienteId(idCliente);
+
+        cliente.setFatturatoAnnuale(totaleFatturato);
+
+        clienteRepository.save(cliente);
     }
 
     // DELETE

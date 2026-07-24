@@ -1,23 +1,20 @@
 package robertovisconti.be_bw5_tm1.repositories;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
-import robertovisconti.be_bw5_tm1.entities.StatoFattura;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Repository
 public interface FatturaRepository extends JpaRepository<Fattura, UUID>, JpaSpecificationExecutor<Fattura> {
 
+
+    @Query("SELECT COALESCE(SUM(f.importo), 0.0) FROM Fattura f WHERE f.cliente.id = :idCliente")
+    Double sumImportoByClienteId(@Param("idCliente") UUID idCliente);
 
 
 
