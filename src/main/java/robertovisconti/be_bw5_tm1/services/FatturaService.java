@@ -7,17 +7,14 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
 import robertovisconti.be_bw5_tm1.entities.StatoFattura;
-import robertovisconti.be_bw5_tm1.exceptions.BadRequestException;
-import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
-import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaUpdateFatturaDTO;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
+import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
 import robertovisconti.be_bw5_tm1.repositories.FatturaRepository;
 import robertovisconti.be_bw5_tm1.specifications.FatturaSpecification;
 
-import java.time.LocalDate;
 import java.util.UUID;
 
 @Service
@@ -25,17 +22,33 @@ public class FatturaService {
 
     // dependency injection
 
+    private final ClienteRepository clienteRepository;
     private final FatturaRepository fatturaRepository;
     private final StatoFatturaService statoFatturaService;
 
-    public FatturaService(FatturaRepository fatturaRepository, StatoFatturaService statoFatturaService) {
+    public FatturaService(FatturaRepository fatturaRepository, StatoFatturaService statoFatturaService, ClienteRepository clienteRepository) {
         this.fatturaRepository = fatturaRepository;
         this.statoFatturaService = statoFatturaService;
+        this.clienteRepository = clienteRepository;
     }
 
     // ******************************  methods  ***************************************************
 
+    public RispostaNuovaFatturaDTO save(RichiestaNuovaFatturaDTO body) {
 
+        Fattura nuovaFattura = new Fattura();
+        nuovaFattura.setData(body.data());
+        nuovaFattura.setImporto(body.importo());
+        nuovaFattura.setNumero(body.numero());
+        nuovaFattura.setCliente(body.cliente());
+
+        StatoFattura statoDefault = statoFatturaService.findByTitolo("DA PAGARE");
+        nuovaFattura.setStatoFattura(statoDefault);
+
+        Fattura fatturaSalvata = this.fatturaRepository.save(nuovaFattura);
+
+        return new RispostaNuovaFatturaDTO(fatturaSalvata.getId());
+    }
 
     public Page<Fattura> search(UUID idCliente, Integer anno, Integer mese, Double importoMin, Double importoMax, String statoFattura, int page, int size) {
         Specification<Fattura> spec = Specification

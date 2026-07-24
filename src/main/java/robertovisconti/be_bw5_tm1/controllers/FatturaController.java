@@ -1,11 +1,15 @@
 package robertovisconti.be_bw5_tm1.controllers;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
 import robertovisconti.be_bw5_tm1.entities.Utente;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
+import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.services.FatturaService;
 
 import java.util.UUID;
@@ -26,6 +30,13 @@ public class FatturaController {
     // ********************  endpoints **********************************************************************
 
 
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    public RispostaNuovaFatturaDTO create(@RequestBody @Validated RichiestaNuovaFatturaDTO body) {
+        return this.fatturaService.save(body);
+    }
+
     @GetMapping("/search")
     public Page<Fattura> searchMe(
             @RequestParam(required = false) UUID clienteId,
@@ -40,7 +51,6 @@ public class FatturaController {
         return this.fatturaService.search(clienteId, anno, mese, importoMin, importoMax,
                 statoFattura, page, size);
     }
-
 
 
     @GetMapping("/search/me")
