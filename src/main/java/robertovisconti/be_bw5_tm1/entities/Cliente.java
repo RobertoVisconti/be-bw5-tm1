@@ -32,7 +32,7 @@ public class Cliente {
     private LocalDateTime dataUltimoContatto;
 
     @Column(name = "fatturato_annuale")
-    private double fatturatoAnnuale;
+    private Double fatturatoAnnuale;
 
     @Column(unique = true)
     private String pec;
@@ -69,7 +69,7 @@ public class Cliente {
     private boolean isDeleted = false;
 
 
-    public Cliente(String ragioneSociale, String partitaIva, LocalDateTime dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String logoAziendale, TipoCliente tipoCliente, Indirizzo sedeLegale, Indirizzo sedeOperativa) {
+    public Cliente(String ragioneSociale, String partitaIva, LocalDateTime dataUltimoContatto, Double fatturatoAnnuale, String pec, String telefono, String emailContatto, String nomeContatto, String cognomeContatto, String logoAziendale, TipoCliente tipoCliente, Indirizzo sedeLegale, Indirizzo sedeOperativa) {
         this.ragioneSociale = ragioneSociale;
         this.partitaIva = partitaIva;
         this.dataUltimoContatto = dataUltimoContatto;

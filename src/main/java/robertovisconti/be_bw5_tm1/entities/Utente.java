@@ -1,5 +1,6 @@
 package robertovisconti.be_bw5_tm1.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -35,7 +36,9 @@ public class Utente implements UserDetails {
     private String username;
     @Column(nullable = false)
     private String email;
+
     @Column(nullable = false)
+    @JsonIgnore
     private String password;
     @Column(nullable = false)
     private String avatar;
