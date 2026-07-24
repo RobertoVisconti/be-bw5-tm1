@@ -4,6 +4,7 @@ package robertovisconti.be_bw5_tm1.services;
 import org.springframework.stereotype.Service;
 import robertovisconti.be_bw5_tm1.entities.Comune;
 import robertovisconti.be_bw5_tm1.entities.Indirizzo;
+import robertovisconti.be_bw5_tm1.enums.TipoIndirizzo;
 import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.IndirizzoDTO;
 import robertovisconti.be_bw5_tm1.repositories.ComuneRepository;
@@ -30,6 +31,10 @@ public class IndirizzoService {
         nuovoIndirizzo.setCivico(body.civico());
         nuovoIndirizzo.setLocalita(body.localita());
         nuovoIndirizzo.setCap(body.cap());
+        switch (body.tipoIndirizzo().toUpperCase()) {
+            case "SEDE LEGALE" -> nuovoIndirizzo.setTipo(TipoIndirizzo.SEDE_LEGALE);
+            case "SEDE OPERATIVA" -> nuovoIndirizzo.setTipo(TipoIndirizzo.SEDE_OPERATIVA);
+        }
 
         nuovoIndirizzo.setComune(comune);
 

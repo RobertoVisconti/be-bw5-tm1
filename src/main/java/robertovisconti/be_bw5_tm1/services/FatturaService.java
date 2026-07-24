@@ -7,8 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import robertovisconti.be_bw5_tm1.entities.Cliente;
 import robertovisconti.be_bw5_tm1.entities.Fattura;
 import robertovisconti.be_bw5_tm1.entities.StatoFattura;
+import robertovisconti.be_bw5_tm1.exceptions.NotFoundException;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RichiestaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.payloadsDTO.fattura.RispostaNuovaFatturaDTO;
 import robertovisconti.be_bw5_tm1.repositories.ClienteRepository;
@@ -40,7 +42,8 @@ public class FatturaService {
         nuovaFattura.setData(body.data());
         nuovaFattura.setImporto(body.importo());
         nuovaFattura.setNumero(body.numero());
-        nuovaFattura.setCliente(body.cliente());
+        Cliente found = this.clienteRepository.findById(body.cliente()).orElseThrow(() -> new NotFoundException("Cliente non trovato"));
+        nuovaFattura.setCliente(found);
 
         StatoFattura statoDefault = statoFatturaService.findByTitolo("DA PAGARE");
         nuovaFattura.setStatoFattura(statoDefault);

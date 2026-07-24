@@ -34,6 +34,7 @@ public class FatturaController {
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public RispostaNuovaFatturaDTO create(@RequestBody @Validated RichiestaNuovaFatturaDTO body) {
+        
         return this.fatturaService.save(body);
     }
 

@@ -7,6 +7,7 @@ public record IndirizzoDTO(
         String civico,
         String localita,
         String cap,
+        String tipoIndirizzo,
         UUID comuneId // Oppure String nomeComune
 ) {
 }

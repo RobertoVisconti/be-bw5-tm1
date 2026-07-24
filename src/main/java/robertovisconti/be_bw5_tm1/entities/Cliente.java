@@ -32,7 +32,7 @@ public class Cliente {
     private LocalDateTime dataUltimoContatto;
 
     @Column(name = "fatturato_annuale")
-    private double fatturatoAnnuale;
+    private Double fatturatoAnnuale;
 
     @Column(unique = true)
     private String pec;
